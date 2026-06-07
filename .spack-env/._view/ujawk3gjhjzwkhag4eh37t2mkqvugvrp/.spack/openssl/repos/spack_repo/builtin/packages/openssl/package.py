@@ -1,0 +1,1 @@
+/n/home03/ttapera/software/spack/opt/spack/linux-icelake/openssl-3.6.1-frb2dp7k5bk746bvsg5oducyobbywi33/.spack/repos/spack_repo/builtin/packages/openssl/package.py

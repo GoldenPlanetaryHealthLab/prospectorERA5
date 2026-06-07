@@ -1,0 +1,1 @@
+/n/home03/ttapera/software/spack/opt/spack/linux-icelake/gettext-1.0-zk5t33zhcsumwbniquwovfabatlzadtb/share/locale/tr/LC_MESSAGES/gettext-runtime.mo

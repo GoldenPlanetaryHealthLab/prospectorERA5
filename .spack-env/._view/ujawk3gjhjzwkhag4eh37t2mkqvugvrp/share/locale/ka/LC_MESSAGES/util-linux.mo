@@ -1,0 +1,1 @@
+/n/home03/ttapera/software/spack/opt/spack/linux-icelake/util-linux-uuid-2.41-t2rsltuzzmrvrmrcptnfyuxbw2zcgi4a/share/locale/ka/LC_MESSAGES/util-linux.mo

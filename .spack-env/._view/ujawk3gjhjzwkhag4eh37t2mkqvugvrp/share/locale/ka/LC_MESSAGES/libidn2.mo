@@ -1,0 +1,1 @@
+/n/home03/ttapera/software/spack/opt/spack/linux-icelake/libidn2-2.3.8-gya6aelaksrpt2c4zftzz6l2odtmjco6/share/locale/ka/LC_MESSAGES/libidn2.mo
