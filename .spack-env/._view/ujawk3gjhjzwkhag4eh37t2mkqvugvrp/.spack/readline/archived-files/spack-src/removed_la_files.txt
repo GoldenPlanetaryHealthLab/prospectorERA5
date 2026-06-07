@@ -1,1 +1,0 @@
-/n/home03/ttapera/software/spack/opt/spack/linux-icelake/readline-8.3-bwalfetypu5dan7lk7hudemowsu4foyp/.spack/archived-files/spack-src/removed_la_files.txt

@@ -1,1 +1,0 @@
-/n/home03/ttapera/software/spack/opt/spack/linux-icelake/libedit-20251016-3.1-qijquy5lp5qxqv2he4utyi7hlrs3pike/.spack/repos/spack_repo/builtin/packages/libedit/package.py

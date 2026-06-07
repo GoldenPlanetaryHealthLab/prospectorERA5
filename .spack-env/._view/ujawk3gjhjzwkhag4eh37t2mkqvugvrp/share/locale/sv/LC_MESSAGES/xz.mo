@@ -1,1 +1,0 @@
-/n/home03/ttapera/software/spack/opt/spack/linux-icelake/xz-5.8.3-32ve7ejspaxfhzv6nv3erdu2ge5o7eoo/share/locale/sv/LC_MESSAGES/xz.mo

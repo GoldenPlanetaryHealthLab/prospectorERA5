@@ -1,1 +1,0 @@
-/n/home03/ttapera/software/spack/opt/spack/linux-icelake/zlib-ng-2.3.3-zfwpbw5fatjue5zbwvoo3g6ggubp3qzo/include/zlib_name_mangling.h

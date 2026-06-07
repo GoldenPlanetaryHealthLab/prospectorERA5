@@ -1,1 +1,0 @@
-/n/home03/ttapera/software/spack/opt/spack/linux-icelake/gdbm-1.26-6chzkffp2djkrkkdzjy6bg7ryzt2ew7q/share/locale/ru/LC_MESSAGES/gdbm.mo

@@ -1,0 +1,46 @@
+Scratch: /scratch/tmp.GFFsdoCv7F
+Project: /n/holylabs/cgolden_lab/Lab/frontier/works/prospectors/prospectorERA5Land
+Tunnel: prospectorERA5Land-tunnel
+Host: holy8a26304.rc.fas.harvard.edu
+/n/holylabs/cgolden_lab/Lab/frontier/works/prospectors/prospectorERA5Land/.spack-env/view/bin/R
+/n/holylabs/cgolden_lab/Lab/frontier/works/prospectors/prospectorERA5Land/.spack-env/view/bin/Rscript
+/usr/bin/gcc
+/usr/bin/g++
+WARNING: ignoring environment value of R_HOME
+/usr/bin/gcc
+WARNING: ignoring environment value of R_HOME
+/usr/bin/g++
+To grant access to the server, please log into https://github.com/login/device and use code C804-E97E
+*
+* Visual Studio Code Server
+*
+* By using the software, you agree to
+* the Visual Studio Code Server License Terms (https://aka.ms/vscode-server-license) and
+* the Microsoft Privacy Statement (https://privacy.microsoft.com/en-US/privacystatement).
+*
+
+  Visual Studio Code Tunnel v1.123.0
+
+  ➜  Tunnel:   prospectorera5land-tunnel
+  ➜  Open:  https://vscode.dev/tunnel/prospectorera5land-tunnel/n/holylabs/cgolden_lab/Lab/frontier/works/prospectors/prospectorERA5Land
+
+[2026-06-07 22:20:58] info No agent host supervisor running; starting one in the background
+[2026-06-07 22:21:22] info [tunnels::connections::relay_tunnel_host] Opened new client on channel 2
+[2026-06-07 22:21:22] info [russh::server] wrote id
+[2026-06-07 22:21:22] info [russh::server] read other id
+[2026-06-07 22:21:22] info [russh::server] session is running
+[2026-06-07 22:21:23] info [rpc.0] Checking /n/home03/ttapera/.vscode/cli/servers/Stable-6a44c352bd24569c417e530095901b649960f9f8/log.txt and /n/home03/ttapera/.vscode/cli/servers/Stable-6a44c352bd24569c417e530095901b649960f9f8/pid.txt for a running server...
+[2026-06-07 22:21:23] info [rpc.0] Starting server...
+[2026-06-07 22:21:25] info [rpc.0] Server started
+[2026-06-07 22:21:34] info [tunnels::connections::relay_tunnel_host] Opened new client on channel 3
+[2026-06-07 22:21:34] info [russh::server] wrote id
+[2026-06-07 22:21:34] info [russh::server] read other id
+[2026-06-07 22:21:34] info [russh::server] session is running
+[2026-06-07 22:21:56] warn [rpc.0] error handling call: NoAttachedServerError(NoAttachedServerError)
+[2026-06-07 22:22:25] info [rpc.2] Disposed of connection to running server.
+[2026-06-07 22:22:30] warn [rpc.0] error handling call: NoAttachedServerError(NoAttachedServerError)
+[2026-06-07 22:22:36] info [tunnels::connections::relay_tunnel_host] Opened new client on channel 4
+[2026-06-07 22:22:36] info [russh::server] wrote id
+[2026-06-07 22:22:36] info [russh::server] read other id
+[2026-06-07 22:22:36] info [russh::server] session is running
+[2026-06-07 22:22:39] warn [rpc.0] error handling call: NoAttachedServerError(NoAttachedServerError)

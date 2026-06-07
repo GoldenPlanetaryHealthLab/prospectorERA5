@@ -1,1 +1,0 @@
-/n/home03/ttapera/software/spack/opt/spack/linux-icelake/pigz-2.8-er6fvhgadl5e75h5yrlhmvi6s5tlwkn5/.spack/repos/spack_repo/builtin/packages/pigz/package.py

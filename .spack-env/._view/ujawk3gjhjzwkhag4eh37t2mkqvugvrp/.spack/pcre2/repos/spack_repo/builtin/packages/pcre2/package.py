@@ -1,1 +1,0 @@
-/n/home03/ttapera/software/spack/opt/spack/linux-icelake/pcre2-10.44-t2crwbqoq4tazofxgjrxp6hgwajd3sdj/.spack/repos/spack_repo/builtin/packages/pcre2/package.py

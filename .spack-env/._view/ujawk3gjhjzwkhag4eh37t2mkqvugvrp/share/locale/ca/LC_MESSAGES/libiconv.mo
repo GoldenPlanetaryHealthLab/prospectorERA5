@@ -1,1 +1,0 @@
-/n/home03/ttapera/software/spack/opt/spack/linux-icelake/libiconv-1.18-2hz6qh5j76gnnzbgaeosztv7dxv6u6ex/share/locale/ca/LC_MESSAGES/libiconv.mo
