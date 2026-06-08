@@ -9,9 +9,129 @@ for the ERA5-Land data. The DAG is defined in each code chunk as a
 `tar_target` object when it is assigned, while `tar_tangle()`
 is used to run the pipeline as a `targets` script.
 
+```{r}
+library(here)
+library(targets)
+library(tibble)
+library(tidyr)
+library(dplyr)
+library(lubridate)
+library(purrr)
+library(stringr)
+library(reticulate)
+```
+
 First, acquire the input data, which requires the healthsheds from
 the Gold Mine. We'll use `stagecoach` for this as usual:
 
 ```{r}
+#| format: file
+#| packages: [here]
 
+library(here)
+
+stagecoach_manifest <- here("stagecoach_manifest.yml")
+download_era5_script <- here("src", "download_era5.py")
+```
+
+```{r}
+#| format: file
+#| packages: [here]
+
+input_files <- list.files(
+    here("data", "inputs"),
+    recursive=T,
+    full.names=T
+)
+```
+
+We'll track the configuration of the CDS API call as a separate yaml target:
+
+```{r}
+#| packages: [tibble, stringr, dplyr, lubridate, tidyr]
+
+# assign temp variables
+{
+}
+
+cds_api_config <- 
+    expand_grid(
+        years = 2010:2025,
+        months = 1:12,
+        days = 1:31,
+        hours = str_pad(0:23, 2, pad = "0") |>
+            paste0(":00"),
+        countries = c("MDG", "NPL"),
+        data_format = "grib",
+        download_format = "unarchived",
+        datasets = c("reanalysis-era5-land", "reanalysis-era5-single-levels"),
+        variables = c(
+            "2m_temperature",
+            "2m_dewpoint_temperature",
+            "volumetric_soil_water_layer_1",
+            "volumetric_soil_water_layer_2",
+            "surface_solar_radiation_downwards",
+            "total_precipitation",
+            "10m_u_component_of_wind",
+            "10m_v_component_of_wind",
+            "surface_pressure",
+            "soil_temperature_level_1"
+        )
+    ) |> 
+    filter(
+        # filter out invalid dates
+        !(months %in% c(4, 6, 9, 11) & days == 31) &
+        !(months == 2 & days > 29) &
+        !(months == 2 & days == 29 & !leap_year(years))
+    ) |>
+    # every single combination of the above variables is too
+    # granular, so we'll group by country, dataset, variable, year, and month
+    group_by(countries, datasets, variables, years, months) |>
+    # this leaves us with just over 816 calls to make, which is still a lot but more manageable
+    group_split()
+    
+```
+
+We can see one of these groups as an example:
+
+```{r}
+{
+    cds_api_config[[675]]
+}
+```
+
+This group consititutes one call to the API, which will be done in Python using
+the `cdsapi` package. The next step is to write the Python script that will make 
+the API calls.
+
+To send an API call, we'll need to convert the tibble to a dictionary:
+
+```{r}
+#| packages: [purrr, reticulate]
+cds_api_config_dict <- cds_api_config |>
+    map(~ {
+        list(
+            "format" = unique(.x$data_format),
+            "download_format" = unique(.x$download_format),
+            "dataset" = unique(.x$datasets),
+            "variable" = unique(.x$variables),
+            "country" = unique(.x$countries),
+            "year" = unique(.x$years),
+            "month" = unique(.x$months),
+            "day" = unique(.x$days),
+            "time" = unique(.x$hours)
+        )
+    })
+```
+
+The Python function defined in `download_era5.py` will take this dictionary as input and make the API call.
+We'll import it to R using `reticulate`:
+
+
+```{r}
+library(reticulate)
+
+source_python(download_era5_script)
+
+download_era5(cds_api_config_dict[[1]], area = c(90, -180, -90, 180), output_file = "test.grib", test = TRUE)
 ```

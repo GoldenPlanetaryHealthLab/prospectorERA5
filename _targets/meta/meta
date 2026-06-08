@@ -1,0 +1,9 @@
+name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
+stagecoach_manifest|stem|18cf761d3d4f81cb|3a004ef2a83794e7|2c530c1562a7fbd1|-491529481|/n/holylabs/cgolden_lab/Lab/frontier/works/prospectors/prospectorERA5Land/stagecoach_manifest.yml|t20612.0125069309s|s1536b|1536|file|local|vector|||0.156||
+input_files|stem|c7c952d398a57951|d658f1a929d163b6|2c530c1562a7fbd1|872109100|/n/holylabs/cgolden_lab/Lab/frontier/works/prospectors/prospectorERA5Land/data/inputs/01_gold_mine/mdg_healthsheds/healthsheds2022/healthsheds2022.dbf*/n/holylabs/cgolden_lab/Lab/frontier/works/prospectors/prospectorERA5Land/data/inputs/01_gold_mine/mdg_healthsheds/healthsheds2022/healthsheds2022.prj*/n/holylabs/cgolden_lab/Lab/frontier/works/prospectors/prospectorERA5Land/data/inputs/01_gold_mine/mdg_healthsheds/healthsheds2022/healthsheds2022.shp*/n/holylabs/cgolden_lab/Lab/frontier/works/prospectors/prospectorERA5Land/data/inputs/01_gold_mine/mdg_healthsheds/healthsheds2022/healthsheds2022.shx|t19760.7161458333s|s25697020b|25697020|file|local|vector|||0.032||
+cds_api_config|stem|021edd25d4797e24|3b49fd1b5b197b66|2c530c1562a7fbd1|-2007534307||t20612.2148431377s|s8905957b|8905957|rds|local|vector|||6.011||
+cds_api_config_dict|stem|9a14ef27bae9e8b3|e5393b3cb105a925|5da0f7b2af9d6a20|549037343||t20612.214922918s|s85420b|85420|rds|local|vector|||2.2||
+download_era5_py|stem||ac32f697c0ad8f7e|2c530c1562a7fbd1|425031823||t20612.215621798s||0|rds|local|vector|||0.033||object 'py' not found
+.rv|object|035861bf64d886ee
+.Random.seed|object|8124027c9dd04a65
+download_era5_script|stem|08da42bac5c8b300|03b4a8e70da62971|2c530c1562a7fbd1|-1953651476|/n/holylabs/cgolden_lab/Lab/frontier/works/prospectors/prospectorERA5Land/src/download_era5.py|t20612.2105864237s|s447b|447|file|local|vector|||0.253||

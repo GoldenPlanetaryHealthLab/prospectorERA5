@@ -6,9 +6,7 @@ r_version = "4.5"
 # The alias is only used in this file if you want to specifically require a dependency to come from a certain repository.
 # Example: { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
 repositories = [
-    { alias = """
-CRAN
-""", url = "https://cran.r-project.org/" },
+    { alias = "CRAN", url = "https://cran.r-project.org/" },
     { alias = "PPM", url = "https://packagemanager.posit.co/cran/2026-06-01" },
 ]
 
@@ -21,4 +19,9 @@ dependencies = [
     "targets",
     "usethis",
     "here",
+    "tarchetypes",
+    "languageserver",
+    "parsermd",
+    "lubridate",
+    "reticulate",
 ]

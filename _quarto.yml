@@ -1,5 +1,3 @@
 project:
   title: "prospectorERA5Land"
-
-
-
+  output-dir: "docs"

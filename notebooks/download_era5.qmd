@@ -1,0 +1,55 @@
+---
+title: "Untitled"
+filters:
+    - sorting-hat
+    - ripper
+extensions:
+    sorting-hat:
+        keep:
+            - python
+    ripper:
+        include-yaml: false
+        output-dir: "../src"
+        output-name: "download_era5"
+        script-links-position: "none"
+format: gfm
+---
+
+In this notebook, we'll define the general purpose
+Python function that calls the CDS API to retrieve data from the ERA5
+dataset. It's thankfully a common function that is reusable and
+has been implemented by several folks, so we'll just take that
+and adapt it.
+
+```{python}
+from typing import Dict, Any
+import cdsapi
+
+def download_era5(
+    request: Dict[str, Any],
+    output_file: str,
+    test: bool = True
+    ) -> str:
+
+    output_file = f'{request["dataset"]}_{request["variable"]}_{request["year"]}.grib'
+    
+    if not test:
+        client = cdsapi.Client()
+        client.retrieve(request["dataset"], request, output_file)
+        return output_file
+    else:
+        print(f"Request: {request} to {output_file}")
+        return output_file
+```
+
+In addition, we'll need a convenience function to fetch the bounding
+box for each given country code, which is provided by the
+`countryboundingboxes` package:
+
+
+```{python}
+from country_bounding_boxes import country_subunits_by_iso_code
+
+print([x.bbox for x in country_subunits_by_iso_code('MDG')])
+```
+
