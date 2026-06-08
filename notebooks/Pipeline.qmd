@@ -1,0 +1,17 @@
+---
+title: "Pipeline"
+format: html
+---
+
+This notebook is the orchestrator level of the pipeline.
+It uses `targets` and `tar_tangle` to create a data processing DAG
+for the ERA5-Land data. The DAG is defined in each code chunk as a 
+`tar_target` object when it is assigned, while `tar_tangle()`
+is used to run the pipeline as a `targets` script.
+
+First, acquire the input data, which requires the healthsheds from
+the Gold Mine. We'll use `stagecoach` for this as usual:
+
+```{r}
+
+```

@@ -44,3 +44,58 @@ To grant access to the server, please log into https://github.com/login/device a
 [2026-06-07 22:22:36] info [russh::server] read other id
 [2026-06-07 22:22:36] info [russh::server] session is running
 [2026-06-07 22:22:39] warn [rpc.0] error handling call: NoAttachedServerError(NoAttachedServerError)
+[2026-06-07 22:32:39] warn [rpc.0] error handling call: NoAttachedServerError(NoAttachedServerError)
+[2026-06-07 22:49:20] info [rpc.3] Disposed of connection to running server.
+[2026-06-07 22:49:50] info [rpc.0] Disposed of connection to running server.
+[2026-06-07 22:51:35] info [tunnels::connections::relay_tunnel_host] Opened new client on channel 5
+[2026-06-07 22:51:35] info [russh::server] wrote id
+[2026-06-07 22:51:35] info [russh::server] read other id
+[2026-06-07 22:51:35] info [russh::server] session is running
+[2026-06-07 22:51:38] info [rpc.4] Checking /n/home03/ttapera/.vscode/cli/servers/Stable-6a44c352bd24569c417e530095901b649960f9f8/log.txt and /n/home03/ttapera/.vscode/cli/servers/Stable-6a44c352bd24569c417e530095901b649960f9f8/pid.txt for a running server...
+[2026-06-07 22:51:38] info [rpc.4] Found running server (pid=1383069)
+[2026-06-07 22:51:46] info [tunnels::connections::relay_tunnel_host] Opened new client on channel 6
+[2026-06-07 22:51:46] info [russh::server] wrote id
+[2026-06-07 22:51:46] info [russh::server] read other id
+[2026-06-07 22:51:46] info [russh::server] session is running
+[2026-06-07 22:51:47] info [rpc.5] Disposed of connection to running server.
+[2026-06-07 22:51:53] info [tunnels::connections::relay_tunnel_host] Opened new client on channel 7
+[2026-06-07 22:51:53] info [russh::server] wrote id
+[2026-06-07 22:51:53] info [russh::server] read other id
+[2026-06-07 22:51:53] info [russh::server] session is running
+[2026-06-07 22:51:58] warn [rpc.4] error handling call: NoAttachedServerError(NoAttachedServerError)
+[2026-06-07 22:52:24] info [rpc.6] Disposed of connection to running server.
+[2026-06-07 22:52:32] info [tunnels::connections::relay_tunnel_host] Opened new client on channel 8
+[2026-06-07 22:52:32] info [russh::server] wrote id
+[2026-06-07 22:52:32] info [russh::server] read other id
+[2026-06-07 22:52:32] info [russh::server] session is running
+[2026-06-07 22:52:36] warn [rpc.4] error handling call: NoAttachedServerError(NoAttachedServerError)
+[2026-06-07 22:56:55] info [rpc.7] Disposed of connection to running server.
+[2026-06-07 22:56:59] info [tunnels::connections::relay_tunnel_host] Opened new client on channel 9
+[2026-06-07 22:56:59] info [russh::server] wrote id
+[2026-06-07 22:56:59] info [russh::server] read other id
+[2026-06-07 22:56:59] info [russh::server] session is running
+[2026-06-07 22:57:44] info [rpc.8] Disposed of connection to running server.
+[2026-06-07 22:57:53] info [tunnels::connections::relay_tunnel_host] Opened new client on channel 10
+[2026-06-07 22:57:53] info [russh::server] wrote id
+[2026-06-07 22:57:53] info [russh::server] read other id
+[2026-06-07 22:57:53] info [russh::server] session is running
+[2026-06-07 23:01:14] info [rpc.9] Disposed of connection to running server.
+[2026-06-07 23:01:23] info [tunnels::connections::relay_tunnel_host] Opened new client on channel 11
+[2026-06-07 23:01:23] info [russh::server] wrote id
+[2026-06-07 23:01:23] info [russh::server] read other id
+[2026-06-07 23:01:23] info [russh::server] session is running
+[2026-06-07 23:08:54] info [rpc.10] Disposed of connection to running server.
+[2026-06-07 23:09:02] info [tunnels::connections::relay_tunnel_host] Opened new client on channel 12
+[2026-06-07 23:09:02] info [russh::server] wrote id
+[2026-06-07 23:09:02] info [russh::server] read other id
+[2026-06-07 23:09:02] info [russh::server] session is running
+[2026-06-07 23:13:45] info [rpc.11] Disposed of connection to running server.
+[2026-06-07 23:13:53] info [tunnels::connections::relay_tunnel_host] Opened new client on channel 13
+[2026-06-07 23:13:53] info [russh::server] wrote id
+[2026-06-07 23:13:53] info [russh::server] read other id
+[2026-06-07 23:13:53] info [russh::server] session is running
+[2026-06-07 23:48:16] info [rpc.12] Disposed of connection to running server.
+[2026-06-07 23:48:24] info [tunnels::connections::relay_tunnel_host] Opened new client on channel 14
+[2026-06-07 23:48:24] info [russh::server] wrote id
+[2026-06-07 23:48:24] info [russh::server] read other id
+[2026-06-07 23:48:24] info [russh::server] session is running
