@@ -24,4 +24,6 @@ dependencies = [
     "parsermd",
     "lubridate",
     "reticulate",
+    "crew.cluster",
+    "clustermq",
 ]

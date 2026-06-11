@@ -206,6 +206,18 @@ force_source = false
 dependencies = []
 
 [[packages]]
+name = "clustermq"
+version = "0.10.1"
+source = { repository = "https://cran.r-project.org/" }
+force_source = false
+dependencies = [
+    "globals",
+    "progress",
+    "R6",
+    "Rcpp",
+]
+
+[[packages]]
 name = "codetools"
 version = "0.2-20"
 source = { repository = "https://cran.r-project.org/" }
@@ -251,6 +263,44 @@ dependencies = [
     "curl",
     "jsonlite",
     "askpass",
+]
+
+[[packages]]
+name = "crew"
+version = "1.3.1"
+source = { repository = "https://cran.r-project.org/" }
+force_source = false
+dependencies = [
+    { name = "cli", requirement = "(>= 3.1.0)" },
+    { name = "collections", requirement = "(>= 0.3.9)" },
+    "data.table",
+    "later",
+    { name = "mirai", requirement = "(>= 2.7.0)" },
+    { name = "nanonext", requirement = "(>= 1.9.0)" },
+    "processx",
+    "promises",
+    "ps",
+    "R6",
+    "rlang",
+    "tibble",
+    "tidyselect",
+]
+
+[[packages]]
+name = "crew.cluster"
+version = "0.4.0"
+source = { repository = "https://cran.r-project.org/" }
+force_source = false
+dependencies = [
+    { name = "crew", requirement = "(>= 1.3.0)" },
+    "lifecycle",
+    "nanonext",
+    "ps",
+    "R6",
+    "rlang",
+    "vctrs",
+    "xml2",
+    "yaml",
 ]
 
 [[packages]]
@@ -377,6 +427,15 @@ version = "0.1.2"
 source = { repository = "https://cran.r-project.org/" }
 force_source = false
 dependencies = []
+
+[[packages]]
+name = "globals"
+version = "0.19.1"
+source = { repository = "https://cran.r-project.org/" }
+force_source = false
+dependencies = [
+    "codetools",
+]
 
 [[packages]]
 name = "glue"
@@ -598,6 +657,22 @@ force_source = false
 dependencies = []
 
 [[packages]]
+name = "mirai"
+version = "2.7.1"
+source = { repository = "https://cran.r-project.org/" }
+force_source = false
+dependencies = [
+    { name = "nanonext", requirement = "(>= 1.9.0)" },
+]
+
+[[packages]]
+name = "nanonext"
+version = "1.9.1"
+source = { repository = "https://cran.r-project.org/" }
+force_source = false
+dependencies = []
+
+[[packages]]
 name = "openssl"
 version = "2.4.1"
 source = { repository = "https://cran.r-project.org/" }
@@ -725,6 +800,21 @@ dependencies = [
     "hms",
     "prettyunits",
     "R6",
+]
+
+[[packages]]
+name = "promises"
+version = "1.5.0"
+source = { repository = "https://cran.r-project.org/" }
+force_source = false
+dependencies = [
+    { name = "fastmap", requirement = "(>= 1.1.0)" },
+    "later",
+    "lifecycle",
+    { name = "magrittr", requirement = "(>= 1.5)" },
+    { name = "otel", requirement = "(>= 0.2.0)" },
+    "R6",
+    "rlang",
 ]
 
 [[packages]]

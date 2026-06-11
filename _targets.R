@@ -6,10 +6,12 @@
 # Load packages required to define the pipeline:
 library(targets)
 library(tarchetypes) # Load other packages as needed.
+library(crew)
+library(crew.cluster)
 
 # Set target options:
 tar_option_set(
-  packages = c("tibble") # Packages that your targets need for their tasks.
+  packages = c("tibble"), # Packages that your targets need for their tasks.
   # format = "qs", # Optionally set the default storage format. qs is fast.
   #
   # Pipelines that take a long time to run may benefit from
@@ -42,13 +44,24 @@ tar_option_set(
   #   )
   #
   # Set other options as needed.
+  # controller = crew_controller_slurm(
+  #   workers = 3,
+  #   options_cluster = crew_options_slurm(
+  #     time_minutes = 15,
+  #     partition = "hsph",
+  #     cpus_per_task = 1,
+  #     n_tasks = 3,
+  #     script_lines = c("#SBATCH --time=00:15:00")
+  #   )
+  # )
+  controller = crew_controller_local(workers = 3)
 )
 
 # Run the R scripts in the R/ folder with your custom functions:
-tar_source()
+# tar_source()
 # tar_source("other_functions.R") # Source other scripts as needed.
 
 # Replace the target list below with your own:
-list(
+tar_plan(
   tar_tangle("notebooks/Pipeline.qmd")
 )

@@ -50,14 +50,10 @@ We'll track the configuration of the CDS API call as a separate yaml target:
 ```{r}
 #| packages: [tibble, stringr, dplyr, lubridate, tidyr]
 
-# assign temp variables
-{
-}
-
 cds_api_config <- 
     expand_grid(
         years = 2010:2025,
-        months = 1:12,
+        months = str_pad(1:12, 2, pad = "0"),
         days = 1:31,
         hours = str_pad(0:23, 2, pad = "0") |>
             paste0(":00"),
@@ -75,7 +71,8 @@ cds_api_config <-
             "10m_u_component_of_wind",
             "10m_v_component_of_wind",
             "surface_pressure",
-            "soil_temperature_level_1"
+            "soil_temperature_level_1",
+            "geopotential"
         )
     ) |> 
     filter(
@@ -84,11 +81,10 @@ cds_api_config <-
         !(months == 2 & days > 29) &
         !(months == 2 & days == 29 & !leap_year(years))
     ) |>
-    # every single combination of the above variables is too
-    # granular, so we'll group by country, dataset, variable, year, and month
-    group_by(countries, datasets, variables, years, months) |>
-    # this leaves us with just over 816 calls to make, which is still a lot but more manageable
-    group_split()
+    filter(
+        # filter out time invariant variables; only need the first hour for geopotential
+        !(variables == "geopotential" & hours != "00:00")
+    )
     
 ```
 
@@ -96,11 +92,12 @@ We can see one of these groups as an example:
 
 ```{r}
 {
-    cds_api_config[[675]]
+    cds_api_config |>
+        sample_n(1)
 }
 ```
 
-This group consititutes one call to the API, which will be done in Python using
+This group constitutes one call to the API, which will be done in Python using
 the `cdsapi` package. The next step is to write the Python script that will make 
 the API calls.
 
@@ -109,9 +106,15 @@ To send an API call, we'll need to convert the tibble to a dictionary:
 ```{r}
 #| packages: [purrr, reticulate]
 cds_api_config_dict <- cds_api_config |>
+    
+    # every single combination of the above variables is too
+    # granular, so we'll group by country, dataset, variable, year, and month
+    group_by(countries, datasets, variables, years, months) |>
+    # this leaves us with just over 816 calls to make, which is still a lot but more manageable
+    group_split() |>
     map(~ {
         list(
-            "format" = unique(.x$data_format),
+            "data_format" = unique(.x$data_format),
             "download_format" = unique(.x$download_format),
             "dataset" = unique(.x$datasets),
             "variable" = unique(.x$variables),
@@ -133,5 +136,43 @@ library(reticulate)
 
 source_python(download_era5_script)
 
-download_era5(cds_api_config_dict[[1]], area = c(90, -180, -90, 180), output_file = "test.grib", test = TRUE)
+download_era5(cds_api_config_dict[[6336]], here("sandbox"), dry_run = FALSE)
+```
+
+During testing, all the examples less than index 6337 worked, but the one at 
+6337 threw an error. Let's double check this:
+
+```{r}
+{
+    set.seed(as.numeric(now()))
+    #rand_index <- sample(6337:length(cds_api_config_dict), 1)
+    rand_index <- sample(1:6337, 1)
+    print(rand_index)
+    download_era5(cds_api_config_dict[[rand_index]], here("sandbox"), dry_run = FALSE)
+}
+
+```
+
+This is because the API call for that particular 
+combination of parameters is invalid, likely due to the fact that there is no data for that specific combination of country, dataset, variable, year, and month.
+Pretty straightforward! We can use targets to run all of the API calls in
+parallel, right from this notebook:
+
+```{r}
+#| pattern: map(cds_api_config_dict)
+#| packages: [reticulate, here]
+
+raw_era5_download_file <- {
+    
+    if(!testing){
+        source_python(download_era5_script)
+        res <- download_era5(cds_api_config_dict[[1]], here("data", "intermediates"), dry_run = FALSE)
+        res
+    } else {
+        # During testing, we'll just touch the 
+        print(download_era5_script)
+        print(cds_api_config_dict[[1]])
+        
+    }
+}
 ```

@@ -14,9 +14,9 @@ project:
   project_name: prospectorERA5Land
   project_working_dir: /n/holylabs/cgolden_lab/Lab/frontier/works/prospectors/prospectorERA5Land
   input_data_dir: /n/holylabs/cgolden_lab/Lab/frontier/works/prospectors/prospectorERA5Land/data/inputs
-  intermediate_data_dir: /n/holylabs/cgolden_lab/Lab/frontier/stagecoach/data/intermediates
+  intermediate_data_dir: /n/holylabs/cgolden_lab/Lab/frontier/works/prospectors/prospectorERA5Land/data/intermediates
   output_data_dir: /n/holylabs/cgolden_lab/Lab/frontier/works/prospectors/prospectorERA5Land/data/outputs
-  sandbox_dir: /n/holylabs/cgolden_lab/Lab/frontier/stagecoach/sandbox
+  sandbox_dir: /n/holylabs/cgolden_lab/Lab/frontier/works/prospectors/prospectorERA5Land/sandbox
 sources:
   01_gold_mine:
     enabled: true

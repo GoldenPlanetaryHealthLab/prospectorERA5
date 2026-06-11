@@ -8,6 +8,7 @@ spack:
   - r@4.5.1
   - python@3.14
   - zstd
+  - cmake
   view: true
   concretizer:
     unify: true

@@ -1,19 +1,46 @@
 from typing import Dict, Any
+from pyprojroot import here as here_py # do not clash with R here
+from pathlib import Path
 import cdsapi
 
 def download_era5(
     request: Dict[str, Any],
-    area: list[float],
-    output_file: str,
-    test: bool = True
+    output_dir: Path = here_py() / "data" / "intermediates",
+    dry_run: bool = True
     ) -> str:
+    """
+    Downloads ERA5 data from the CDS API based on the provided request parameters.
+    """
 
-    output_file = f'{request["dataset"]}_{request["variable"]}_{request["year"]}.grib'
+    output_file = Path(output_dir) / f'{request["country"]}_{request["dataset"]}_{request["variable"]}_{request["year"]}-{request["month"]}.grib'
+
+    assert output_file.parent.exists(), f"Output directory {output_file.parent} does not exist."
     
-    if not test:
+    # process the country to a bounding box
+    box = get_country_bbox(request["country"])
+    request["area"] = box
+    request.pop("country")
+
+    print(f"Request: {request} to {output_file}")
+    
+    if not dry_run:
+        
         client = cdsapi.Client()
-        client.retrieve(request["dataset"], request, output_file)
-        return output_file
+        client.retrieve(request["dataset"], request, str(output_file))
+
+        assert output_file.exists(), f"Failed to download data for {request['dataset']} {request['variable']} {request['year']}-{request['month']}"
+
+        return str(output_file)
     else:
-        print(f"Request: {request} to {output_file}")
-        return output_file
+        print(f"Ran dry run for {request['dataset']} {request['variable']} {request['year']}-{request['month']}")
+        return str(output_file)
+
+
+from country_bounding_boxes import country_subunits_by_iso_code
+
+def get_country_bbox(iso_code: str) -> list:
+    """
+    Returns the bounding box for a given country code in the format (lon_min, lat_min, lon_max, lat_max).
+    """
+    box = [x.bbox for x in country_subunits_by_iso_code(iso_code)].pop()
+    return [box[3], box[0], box[1], box[2]]
