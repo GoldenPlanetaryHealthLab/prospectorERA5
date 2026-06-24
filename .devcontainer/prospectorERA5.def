@@ -1,0 +1,126 @@
+Bootstrap: docker
+From: spack/ubuntu-jammy:develop
+Stage: build
+
+%post
+mkdir /opt/spack-environment && cd /opt/spack-environment
+cat << EOF > spack.yaml
+spack:
+  # add package specs to the `specs` list
+  specs:
+  - r@4.5.1
+  - python@3.14
+  - zstd
+  - cmake
+  - libxml2 
+  - git
+  - curl
+  - openssl
+  - gmake
+  - icu4c
+  - libpng
+  - abseil-cpp
+  - libx11
+  - libzmq
+  - sqlite
+  - udunits
+  - r-udunits2
+  view: /opt/views/view
+  concretizer:
+    unify: true
+  config:
+    install_tree:
+      root: /opt/software
+EOF
+# Install all the required software
+. /opt/spack/share/spack/setup-env.sh
+spack -e . concretize
+# Install all the required software
+. /opt/spack/share/spack/setup-env.sh
+cd /opt/spack-environment
+# Force Spack downloads through curl and IPv4.
+# This avoids Singularity build failures where urllib/mirrors try an unsupported
+# address family.
+export CURL_IPRESOLVE=4
+spack config add config:url_fetch_method:curl || true
+# Optional diagnostics
+which curl
+curl --version
+spack -e . concretize
+# Main install
+spack -e . install --fail-fast -j8
+spack gc -y
+# Runtime activation script copied into final stage
+spack env activate --sh -d . > /opt/spack-environment/environment_modifications.sh
+# Strip the binaries to reduce the size of the image
+find -L /opt/views/view/* -type f -exec readlink -f '{}' \; |   xargs file -i |   grep 'charset=binary' |   grep 'x-executable\|x-archive\|x-sharedlib' |   awk -F: '{print $1}' | xargs strip
+spack gc -y
+spack env activate --sh -d . >> /opt/spack-environment/environment_modifications.sh
+# Strip the binaries to reduce the size of the image
+find -L /opt/views/view/* -type f -exec readlink -f '{}' \; | \
+xargs file -i | \
+grep 'charset=binary' | \
+grep 'x-executable\|x-archive\|x-sharedlib' | \
+awk -F: '{print $1}' | xargs strip
+
+Bootstrap: docker
+From: ubuntu:22.04
+Stage: final
+
+%files
+/opt/spack-environment /opt
+/opt/software /opt
+/opt/views /opt
+%files from build
+/opt/spack-environment /opt
+/opt/software /opt
+/opt/views /opt
+/opt/spack-environment/environment_modifications.sh /opt/spack-environment/environment_modifications.sh
+%post
+# Symlink the old view location
+ln -s /opt/views/view /opt/view
+# Modify the environment without relying on sourcing shell specific files at startup
+cat /opt/spack-environment/environment_modifications.sh >> $SINGULARITY_ENVIRONMENT
+apt-get update && apt-get install -y --no-install-recommends   pandoc   pandoc-citeproc   curl   gdebi-core   ca-certificates   && rm -rf /var/lib/apt/lists/*
+mkdir -p /work
+
+curl -LO https://quarto.org/download/latest/quarto-linux-amd64.deb
+gdebi --non-interactive quarto-linux-amd64.deb
+quarto check
+rm -f quarto-linux-amd64.deb
+
+curl --proto '=https' --tlsv1.2 -LsSf \
+  https://github.com/eitsupi/arf/releases/latest/download/arf-console-installer.sh | sh
+ARF_BIN="$(command -v arf || true)"
+if [ -z "$ARF_BIN" ]; then
+  ARF_BIN="$(find /root /usr/local /opt -type f -name arf 2>/dev/null | head -n 1)"
+fi
+test -n "$ARF_BIN"
+install -m 0755 "$ARF_BIN" /usr/local/bin/arf
+/usr/local/bin/arf --version
+
+curl -sSL https://raw.githubusercontent.com/A2-ai/rv/refs/heads/main/scripts/install.sh | bash
+RV_BIN="$(command -v rv || true)"
+if [ -z "$RV_BIN" ]; then
+  RV_BIN="$(find /root /usr/local /opt -type f -name rv 2>/dev/null | head -n 1)"
+fi
+test -n "$RV_BIN"
+install -m 0755 "$RV_BIN" /usr/local/bin/rv
+rv --version
+
+id -u vscode >/dev/null 2>&1 || useradd -m -s /bin/bash vscode
+command -v code-server && code-server --version
+command -v arf && arf --version
+command -v quarto && quarto check
+command -v R
+%environment
+export export PATH="/home/vscode/.local/bin:/home/vscode/.cargo/bin:/opt/views/view/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+export export R_HOME="/opt/views/view/rlib/R"
+export export R_LIBS_USER="/work/rv/library"
+export export PROJ_LIB="/opt/views/view/share/proj"
+export export GDAL_DATA="/opt/views/view/share/gdal"
+export export PKG_CONFIG_PATH="/opt/views/view/lib/pkgconfig:/opt/views/view/lib64/pkgconfig:/opt/views/view/share/pkgconfig"
+%runscript
+exec /entrypoint.sh /bin/bash "$@"
+%startscript
+exec /entrypoint.sh /bin/bash "$@"

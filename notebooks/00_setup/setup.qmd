@@ -19,15 +19,83 @@ build process. Currently, we are learning how to use
 Singularity to build containers, and installing all of
 our toolkit and IDE in that container.
 
+## 1. Predictions
+
+Based on conversations and the code I can read, I can predict
+we'll need a geospatial stack, primarily in R, but also some
+Python. This will be a truly polyglot project but will not
+be anything we can't handle. It will also require some serious
+optimization because aggregations are expensive, so we
+can maybe use this opportunity to stress test and explore
+our SLURM skills.
+
+R Packages:
+- terra
+- raster
+- sf
+- exactextractr
+- fasttime
+- data.table
+- targets & tarchetypes
+- reticulate to call the python parts in the targets pipeline
+- crew.cluster
+
+Python Packages:
+- cdsapi
+- country-bounding-boxes
+
+Other:
+- Quarto (this step!)
+- `rv` for R project management
+- `sess` for VSCode-R
+- `uv` for Python project managament
+- `stagecoach` inputs
+- `datalad` for outputs
+
+## 2. Listing Deps
+
+Here, we briefly jot down the packages and the 
+dependency tree it requires for the environment we 
+just predicted:
+
+```r
+pkgs <- toml::read_toml("rproject.toml")$project$dependencies
+pkgs[[11]] <- NULL # removes the `sess` package, which isn't indexed yet
+
+pak::pkg_sysreqs(unlist(pkgs), sysreqs_platform="rockylinux")
+── Install scripts ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── Rockylinux NA ──
+dnf install -y epel-release
+dnf install -y epel-release
+dnf install -y epel-release
+dnf install -y libxml2-devel libX11-devel git libcurl-devel openssl-devel cmake make libicu-devel libpng-devel zeromq-devel abseil-cpp-devel sqlite-devel udunits2-devel
+
+── Packages and their system dependencies ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+clipr       – libX11-devel
+clustermq   – zeromq-devel
+credentials – git
+curl        – libcurl-devel, openssl-devel
+fs          – cmake, make
+gitcreds    – git
+igraph      – libxml2-devel
+nanonext    – cmake
+openssl     – openssl-devel
+png         – libpng-devel
+s2          – abseil-cpp-devel, cmake, openssl-devel
+sass        – make
+sf          – sqlite-devel
+stringi     – libicu-devel
+terra       – sqlite-devel
+units       – udunits2-devel
+xml2        – libxml2-devel
+```
+
+By adding these to spack, we get out final spack definition file.
+
 ## The Singularity file
 
-By rendering this file, any code blocks get written to the
-file in `{output-dir}/{output-name}`. This means we can write
-a singularity definition file in this notebook without
-too much hassle! We'll define these as Bash code chunks,
-but not render any of them —  hopefully this will avoid
-any confusion about rendering and executing any shell
-chunks.
+
+We get the first Singularity container base from
+`spack containerize > .devcontainer/spack_recipe.def`.
 
 ### Spack Base
 
@@ -46,7 +114,7 @@ from spython.main.parse.parsers import SingularityParser
 from spython.main.parse.writers import SingularityWriter
 
 spack_containerize_output = here() / ".devcontainer/spack_recipe.def"
-final_def_file = here() / ".devcontainer/prospectorDHSNepal.def"
+final_def_file = here() / ".devcontainer/prospectorERA5.def"
 
 parser = SingularityParser(spack_containerize_output)
 recipe = parser.recipe
@@ -75,23 +143,45 @@ So we can go ahead and add our sections:
 We have to modify build somewhat for `pkg-config` to work:
 
 ```{python}
+#| eval: true
 build = recipe["build"]
 
 for i, block in enumerate(build.install):
     if "spack -e . install" in block:
         build.install[i] = block.replace(
             "spack -e . install",
-            """spack -e . install pkgconf openssl
-spack -e . load pkgconf openssl
+            """
+# Install all the required software
+. /opt/spack/share/spack/setup-env.sh
+cd /opt/spack-environment
 
-export PKG_CONFIG="$(command -v pkg-config)"
-export OPENSSL_DIR="$(spack -e . location -i openssl)"
-export PKG_CONFIG_PATH="$OPENSSL_DIR/lib/pkgconfig:$OPENSSL_DIR/lib64/pkgconfig:${PKG_CONFIG_PATH:-}"
+# Force Spack downloads through curl and IPv4.
+# This avoids Singularity build failures where urllib/mirrors try an unsupported
+# address family.
+export CURL_IPRESOLVE=4
+spack config add config:url_fetch_method:curl || true
 
-pkg-config --version
-pkg-config --libs --cflags openssl
+# Optional diagnostics
+which curl
+curl --version
 
-spack -e . install --fail-fast -j8"""
+spack -e . concretize
+
+# Main install
+spack -e . install --fail-fast -j8
+
+spack gc -y
+
+# Runtime activation script copied into final stage
+spack env activate --sh -d . > /opt/spack-environment/environment_modifications.sh
+
+# Strip the binaries to reduce the size of the image
+find -L /opt/views/view/* -type f -exec readlink -f '{}' \; | \
+  xargs file -i | \
+  grep 'charset=binary' | \
+  grep 'x-executable\|x-archive\|x-sharedlib' | \
+  awk -F: '{print $1}' | xargs strip
+"""
         )
         break
 else:
@@ -103,6 +193,7 @@ else:
 We'll add pandoc, curl, gdebi, and create a working directory:
 
 ```{python}
+#| eval: true
 final.install.append("""
 apt-get update && apt-get install -y --no-install-recommends \
   pandoc \
@@ -147,7 +238,7 @@ final.files = [
 
 ### Quarto
 
-Quarto is foundational to our notebook drive workflow, so we add it explicitly:
+Quarto is foundational to our notebook driven workflow, so we add it explicitly:
 
 ```{python}
 final.install.append(r"""
@@ -158,7 +249,7 @@ rm -f quarto-linux-amd64.deb
 """)
 ```
 
-### `arf` (Another R Frontend
+### `arf` (Another R Frontend)
 
 `arf` is currently my favourite way to write R code; it's basically a nicer R terminal:
 
@@ -241,6 +332,7 @@ section:
 To fix this, some quick Python:
 
 ```{python}
+#| eval: true
 from pathlib import Path
 import string
 
@@ -285,4 +377,36 @@ final_def_file.write_text("\n".join(fixed_lines) + "\n")
 ```
 
 And with that, we're done!
+
+We can now run the build script.
+
+## Interactive Build
+
+Instead of the above, we're going to try and build the container interactively.
+Given that we know the scientific substrate, and it's been recorded
+through spack, uv, and rv, we can move to the difficult part
+of setting up a container to install them in from the ground up.
+
+1. Compute Node
+
+Use a compute node, of course; this is an intense process,
+and it's not wise to do on a login node:
+
+```sh
+salloc -p hsph -t 2:00:00 --mem=16G -c 8
+```
+
+Clone the repo to the node's scratch space:
+
+```python
+client.build(sudo=False)
+```
+
+Once it's been built, start the shell to start building stuff:
+
+```python
+client.shell(image="rockylinux8.sif", options=["--fakeroot", "--writable"])
+```
+
+
 

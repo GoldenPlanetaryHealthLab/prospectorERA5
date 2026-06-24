@@ -9,6 +9,21 @@ spack:
   - python@3.14
   - zstd
   - cmake
+  - libxml2
+  - git
+  - curl
+  - openssl
+  - gmake
+  - icu4c
+  - libpng
+  - abseil-cpp
+  - libx11
+  - libzmq
+  - sqlite
+  - udunits
+  - r-udunits2
   view: true
   concretizer:
     unify: true
+  container:
+    format: singularity
