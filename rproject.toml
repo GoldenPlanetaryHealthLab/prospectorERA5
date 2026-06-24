@@ -26,4 +26,12 @@ dependencies = [
     "reticulate",
     "crew.cluster",
     "clustermq",
+    { name = "sess", git = "https://github.com/REditorSupport/vscode-R", branch = "master", directory = "sess" },
+    "sf",
+    "terra",
+    "raster",
+    "exactextractr",
+    "fasttime",
+    "data.table",
+    "toml",
 ]
